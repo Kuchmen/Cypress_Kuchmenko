@@ -12,18 +12,60 @@ describe('UI tests for sign in page', () => {
 
   it('should show "Sign in" title', () => {
     cy.get(sign_in_page.title_text).should('be.visible').and('have.text', 'Sign in')
-    cy.get(sign_in_page.get_selector_for_date('some_data')).click()
+     //   cy.get(sign_in_page.get_selector_for_date('some_data')).click()
   })
 
   // Homework 14.07:
   // 1. should show typeable Username field
+  it('Should show typeable Username field', () => {
+    cy.get(sign_in_page.username_field).should('be.visible')
+        .type('AdWard123')
+        .should('have.value', 'AdWard123').clear()
+  })
+
   // 2. should show typeable Password field
+  it('Should show typeable Password field', () => {
+    cy.get(sign_in_page.password_field).should('be.visible')
+        .type('AdW@rd123')
+        .should('have.value', 'AdW@rd123').clear()
+  })
   // 3. should show Username and Password placeholders
+  it('should show Username and Password placeholders', ()=>{
+  //  cy.get(sign_in_page.username_field).focus().blur()
+    cy.get(sign_in_page.username_placeholder).should('be.visible').and('have.text', 'Username')
+    cy.get(sign_in_page.password_placeholder).should('be.visible').and('have.text', 'Password')
+  })
+
   // 4. should show 'Username is required' error if user clicks on it and then click outside this field and didn't enter any value
+  it("'Username is required' error visible if user clicks on it and then click outside this field and didn't enter any value",()=>{
+    cy.get(sign_in_page.password_field).click()
+    cy.get(sign_in_page.username_error_required).should('be.visible').and('have.text', 'Username is required')
+
+  })
   // 5. check "Remember me" checkbox
+  it('Check "Remember me" checkbox',()=>{
+    cy.get(sign_in_page.remember_me_checkbox).should('not.be.checked')
+        .click().should('be.checked')
+  })
+
   // 6. should show disabled by default sign in btn
+
+  it('Disabled by default sign in btn', () =>{
+    cy.get(sign_in_page.sign_in_button).should('be.visible').and('be.disabled')
+  })
   // 7. should have 'Don't have an account? Sign Up' clickable link under 'Sign in' btn
+
+  it("Should have 'Don't have an account? Sign Up' clickable link under 'Sign in' btn",()=>{
+    cy.get(sign_in_page.sign_up_link).should('be.visible')
+        .contains("Don't have an account? Sign Up").click()
+    cy.location('pathname').should('equal', '/signup')
+  })
   // 8. should show Cypress copyright link that leads to 'https://www.cypress.io/'
+
+  it("should show Cypress copyright link that leads to 'https://www.cypress.io/'", ()=>{
+    cy.get(sign_in_page.sypress_logo).should('be.visible')
+        .and('have.attr', 'href', 'https://cypress.io')
+  })
 })
 
   // Homework 19.07:
