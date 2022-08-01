@@ -11,6 +11,7 @@ export const sign_in_page = {
   sign_in_button: 'button[type="submit"]',
   sign_up_link: 'a[data-test="signup"]',
   sypress_logo: 'a[target="_blank"]',
+  logout_button: '[data-test="sidenav-signout"]',
 
   get_selector_for_date(date){
     return `date today ${date}`

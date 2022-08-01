@@ -1,4 +1,6 @@
 const {sign_in_page} = require("../selectors/sign_in_page");
+const {sign_up_page} = require("../selectors/sign_up_page");
+const {users} = require("../support/users");
 
 describe('UI tests for sign in page', () => {
 
@@ -68,12 +70,39 @@ describe('UI tests for sign in page', () => {
   })
 })
 
+describe('UI tests for sign up page', () => {
   // Homework 19.07:
 // 1. should allow a visitor to sign-up
-// 2. should allow a visitor to login
-// 3. should allow a visitor to logout
-// -----------------------------------
+    it('should allow a visitor to sign-up', ()=>{
+      cy.visit('/signup')
+      cy.location('pathname').should('equal', '/signup')
+      cy.get(sign_up_page.firstname_field).type(users.newUser.firstName).should('have.value', users.newUser.firstName)
+      cy.get(sign_up_page.lastname_field).type(users.newUser.lastName).should('have.value', users.newUser.lastName)
+      cy.get(sign_up_page.username_field).type(users.newUser.username).should('have.value', users.newUser.username)
+      cy.get(sign_up_page.password_field).type(users.newUser.password).should('have.value', users.newUser.password)
+      cy.get(sign_up_page.confirm_password_field).type(users.newUser.password).should('have.value', users.newUser.password)
+      cy.get(sign_up_page.sign_up_button).should('be.visible').click()
+      cy.location('pathname').should('equal', '/signin')
+    })
 
+  // 2. should allow a visitor to login
+  it('should allow a visitor to login',()=>{
+    cy.get(sign_in_page.username_field).type(users.testUser1.username).should('have.value', users.testUser1.username)
+    cy.get(sign_in_page.password_field).type(users.testUser1.passwordWithoutHash)
+    cy.get(sign_in_page.sign_in_button).click()
+    cy.location('pathname').should('equal', '/')
+  })
+
+// 3. should allow a visitor to logout
+  it('should allow a visitor to logout', ()=>{
+    cy.get(sign_in_page.logout_button).should('be.visible').click()
+    cy.location('pathname').should('equal', '/signin')
+
+  })
+
+
+// -----------------------------------
+})
 // Homework 21.07
 // 4. should display login errors
 // 5. should display signup errors
