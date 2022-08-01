@@ -12,6 +12,9 @@ export const sign_in_page = {
   sign_up_link: 'a[data-test="signup"]',
   sypress_logo: 'a[target="_blank"]',
   logout_button: '[data-test="sidenav-signout"]',
+  username_error: '#username-helper-text',
+  password_error: '#password-helper-text',
+  sign_in_error: '[data-test="signin-error"] div.MuiAlert-message',
 
   get_selector_for_date(date){
     return `date today ${date}`

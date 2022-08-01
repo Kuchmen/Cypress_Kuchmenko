@@ -21,15 +21,15 @@ describe('UI tests for sign in page', () => {
   // 1. should show typeable Username field
   it('Should show typeable Username field', () => {
     cy.get(sign_in_page.username_field).should('be.visible')
-        .type('AdWard123')
-        .should('have.value', 'AdWard123').clear()
+        .type(users.testUser1.username)
+        .should('have.value', users.testUser1.username).clear()
   })
 
   // 2. should show typeable Password field
   it('Should show typeable Password field', () => {
     cy.get(sign_in_page.password_field).should('be.visible')
-        .type('AdW@rd123')
-        .should('have.value', 'AdW@rd123').clear()
+        .type(users.testUser1.passwordWithoutHash)
+        .should('have.value', users.testUser1.passwordWithoutHash).clear()
   })
   // 3. should show Username and Password placeholders
   it('should show Username and Password placeholders', ()=>{
@@ -103,11 +103,67 @@ describe('UI tests for sign up page', () => {
 
 // -----------------------------------
 })
+
+describe('login, signup errors', () => {
+  before('visiting sign in page', () => {
+    cy.visit('/')
+  })
 // Homework 21.07
 // 4. should display login errors
-// 5. should display signup errors
+  it('should display login errors', ()=>{
+    cy.get(sign_in_page.username_field).type(users.testUser1.username).clear().blur()
+    cy.get(sign_in_page.username_error).should('be.visible').contains('Username is required')
+
+    cy.get(sign_in_page.password_field).type('a').blur()
+    cy.get(sign_in_page.password_error).should('be.visible').contains('Password must contain at least 4 characters')
+  })
+
+  // 5. should display signup errors
+it('should display signup errors', ()=>{
+  cy.visit('/signup')
+  cy.location('pathname').should('equal', '/signup')
+
+  cy.get(sign_up_page.firstname_field).click().blur()
+  cy.get(sign_up_page.firstname_field_error).should('be.visible').contains('First Name is required')
+  cy.get(sign_up_page.lastname_field).click().blur()
+  cy.get(sign_up_page.lastname_field_error).should('be.visible').contains('Last Name is required')
+  cy.get(sign_up_page.username_field).click().blur()
+  cy.get(sign_up_page.username_field_error).should('be.visible').contains('Username is required')
+  cy.get(sign_up_page.password_field).click().blur()
+  cy.get(sign_up_page.password_field_error).should('be.visible').contains('Enter your password')
+  cy.get(sign_up_page.password_field).type('a')
+  cy.get(sign_up_page.password_field_error).should('be.visible').contains('Password must contain at least 4 characters')
+  cy.get(sign_up_page.confirm_password_field).click().blur()
+  cy.get(sign_up_page.confirm_password_field_error).should('be.visible').contains('Confirm your password')
+  cy.get(sign_up_page.confirm_password_field).type('b')
+  cy.get(sign_up_page.confirm_password_field_error).should('be.visible').contains('Password does not match')
+})
+
+
+
 // 6. should error for an invalid user
+
+  it('should error for an invalid user',()=>{
+    cy.visit('/')
+    cy.get(sign_in_page.username_field).type(users.testUser1.username).should('have.value', users.testUser1.username)
+    cy.get(sign_in_page.password_field).type(users.testUser1.uuid)
+    cy.get(sign_in_page.sign_in_button).click()
+    cy.get(sign_in_page.sign_in_error).should('be.visible').contains( 'Username or password is invalid')
+    cy.location('pathname').should('equal', '/signin')
+  })
 // 7. should error for an invalid password for existing user
+it('should error for an invalid password for existing user', ()=>{
+  cy.visit('/')
+  cy.get(sign_in_page.username_field).type(users.testUser1.username)
+  cy.get(sign_in_page.password_field).type(users.testUser1.uuid)
+  cy.get(sign_in_page.sign_in_button).click()
+  cy.get(sign_in_page.sign_in_error).should('be.visible').contains( 'Username or password is invalid')
+  cy.location('pathname').should('equal', '/signin')
+
+ })
+
+
+})
 //  -------------------------------
 // create new spec file for bank_accounts tests, automate following tests:
 // 1. creates a new bank account
