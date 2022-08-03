@@ -164,6 +164,7 @@ it('should error for an invalid password for existing user', ()=>{
 
 
 })
+
 //  -------------------------------
 // create new spec file for bank_accounts tests, automate following tests:
 // 1. creates a new bank account
